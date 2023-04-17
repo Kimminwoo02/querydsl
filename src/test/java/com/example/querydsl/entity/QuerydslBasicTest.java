@@ -134,4 +134,28 @@ public class QuerydslBasicTest {
 
     }
 
+    @Test
+    public void paging(){
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetch();
+        assertThat(result.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void paging2(){
+        QueryResults<Member> memberQueryResults = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetchResults();
+        assertThat(memberQueryResults.getTotal()).isEqualTo(4);
+        assertThat(memberQueryResults.getLimit()).isEqualTo(2);
+        assertThat(memberQueryResults.getOffset()).isEqualTo(1);
+        assertThat(memberQueryResults.getResults().size()).isEqualTo(2);
+    }
 }
